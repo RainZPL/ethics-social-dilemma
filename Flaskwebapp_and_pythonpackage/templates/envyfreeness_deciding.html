@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+    <meta charset="UTF-8">
+    <title>envyfreeness for deciding the best action</title>
+</head>
+<body>
+<div style="text-align: center;">
+    <h3 >How to Calculate: For each option, sum up each user's Envy then calculate their mean value, and the option with the lowest mean Envy is the best output.</h3>
+    <h3 >Limitation: If the amount of the lowest mean Envy is more than 1.</h3>
+    <br>
+    {% if envyfreeness[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>This Principle can't give the answer, because:</label>
+        <label><b>The amount of the lowest mean Envy is more than 1.</b></label><br>
+        <br>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Envy: <b>{{ envy[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>Total Envy for <b>{{ prefer }}</b>: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ envy[num][prefer] }} = {{ total_envy[prefer] }}{% else %}{{ envy[num][prefer] }} + {% endif %}{% endfor %}</b></label><br>
+            <label>So,<br><b>Mean</b> Envy for <b>{{ prefer }}</b>: <b>$$\frac{ {{total_envy[prefer]}} }{ {{ num_user }} } = {{ envyfreeness[2][prefer] }}$$</b></label>
+        {% endfor %}
+        <label>The Lowest Mean Envy is <b>{{ envyfreeness[1] }}</b>, but it has occurred <b>{{ envyfreeness[3] }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+        <br>
+    {% else %}
+        <h3>Here's the Computation:</h3>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Envy: <b>{{ envy[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>Total Envy for <b>{{ prefer }}</b>: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ envy[num][prefer] }} = {{ total_envy[prefer] }}{% else %}{{ envy[num][prefer] }} + {% endif %}{% endfor %}</b></label><br>
+            <label>So,<br><b>Mean</b> Envy for <b>{{ prefer }}</b>: <b>$$\frac{ {{total_envy[prefer]}} }{ {{ num_user }} } = {{ envyfreeness[2][prefer] }}$$</b></label>
+        {% endfor %}
+        <label>The Action <b>{{ envyfreeness[0] }}</b> has Lowest Mean Envy <b>{{ envyfreeness[1] }}</b>.</label><br>
+        <br>
+    {% endif %}
+
+</div>
+
+<button style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+</body>
+</html>

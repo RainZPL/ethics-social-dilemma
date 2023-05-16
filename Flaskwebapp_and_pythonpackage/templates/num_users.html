@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>how many users</title>
+</head>
+<body>
+<h1 style="text-align:center">&nbsp;</h1>
+
+<h1 style="text-align:center">&nbsp;</h1>
+
+<h1 style="text-align:center">&nbsp;</h1>
+{% if error %}
+  <p style="color: red; text-align: center; font-size: large">{{ error }}</p>
+{% endif %}
+<form method="post">
+    <div style="text-align:center; font-size: 30px">
+        <label for="input-number">How many People are involved in social dilemma (>=2):</label>
+        <input type="number" style="font-size: 30px;" id="input-number" name="user_num" min="2" step="1">
+        <button type="submit" style="font-size: 30px">Submit</button>
+    </div>
+</form>
+</body>
+</html>

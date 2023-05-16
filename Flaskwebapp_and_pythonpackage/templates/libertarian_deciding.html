@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+    <meta charset="UTF-8">
+    <title>libertarian_proportionalism for deciding the best action</title>
+</head>
+<body>
+<div style="text-align: center;">
+    <h3 >How to Calculate: The option with the Highest Contribution value is the best output.</h3>
+    <h3 >Limitation: If the amount of the highest contribution value in each option is more than 1.</h3>
+    <br>
+    {% if libertarian_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>This Principle can't give the answer, because:</label>
+        <label><b>The amount of the highest contribution value in each option is more than 1.</b></label><br>
+        <br>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>So,<br>The Highest Contribution for <b>{{ prefer }}</b>: <b>{{ libertarian_proportionalism[2][prefer] }}</b><br></label><br>
+        {% endfor %}
+        <label>The Highest Contribution is <b>{{ libertarian_proportionalism[1] }}</b>, but it has occurred <b>{{ libertarian_proportionalism[3] }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+        <br>
+    {% else %}
+        <h3>Here's the Computation:</h3>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>So,<br>The Highest Contribution for <b>{{ prefer }}</b>: <b>{{ libertarian_proportionalism[2][prefer] }}</b><br></label><br>
+        {% endfor %}
+        <label>The Action <b>{{ libertarian_proportionalism[0] }}</b> has Highest Contribution <b>{{ libertarian_proportionalism[1] }}</b>.</label><br>
+        <br>
+    {% endif %}
+
+</div>
+
+<button style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+    <meta charset="UTF-8">
+    <title>desertbased_proportionalism for allocating resources</title>
+</head>
+<body>
+<div style="text-align: center;">
+    <h3 >How to Calculate: Calculate the difference (contribution – luck) for each user. Then allocate resources proportionally according to the weight of the difference.</h3>
+    <h3 >Limitation: If total difference is 0 or the difference is negative.</h3>
+    <br>
+    {% if desertbased_proportionalism is string %}
+        <label>This Principle can't give the answer, because:</label>
+        {% if total_difference==0 %}
+            <label><b>The Difference value (contribution – luck) for each user are all 0</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1] }}</b></label><br>
+                <br>
+                <label>User{{ num }}'s Luck: <b>{{ luck[num-1] }}</b></label><br>
+                <br>
+                <label><b>User{{ num }}'s Difference: {{ contribution[num-1]-luck[num-1] }}</b></label><br>
+                <br>
+            {% endfor %}
+            <label>If total Difference is 0, then it means that each user has a proportional weight of 0 and no resources can be allocated.</label><br>
+            <br>
+        {% else %}
+            <label><b>One of Difference values (contribution – luck) among users is Negative.</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1] }}</b></label><br>
+                <br>
+                <label>User{{ num }}'s Luck: <b>{{ luck[num-1] }}</b></label><br>
+                <br>
+                <label> <b>User{{ num }}'s Difference: {{ contribution[num-1]-luck[num-1] }}</b></label><br>
+                <br>
+            {% endfor %}
+            <label>If the Difference is Negative, then it means that each user has a <b>Negative</b> proportional weight and the amount of allocated resources will be <b>Negative</b>.</label><br>
+            <br>
+        {% endif %}
+    {% else %}
+        <h3>Here's the Computation:</h3>
+        <label>Quantity Resources: <b>{{ resource_num }}</b></label><br>
+        <br>
+        {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1] }}</b></label><br>
+                <br>
+                <label>User{{ num }}'s Luck: <b>{{ luck[num-1] }}</b></label><br>
+                <br>
+                <label> <b>User{{ num }}'s Difference: {{ contribution[num-1]-luck[num-1] }}</b></label><br>
+                <br>
+        {% endfor %}
+        <label>Total Difference: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ contribution[num]-luck[num] }} = {{ total_difference }}{% else %}{{ contribution[num]-luck[num] }} + {% endif %}{% endfor %}</b></label><br>
+        <br>
+        <label>So,</label><br>
+        <br>
+        {% for num in range(1,num_user + 1) %}
+            <label>User{{ num }} gets: <b>$$\frac{ {{contribution[num-1]-luck[num-1]}} }{ {{ total_difference }} } &times; {{ resource_num }} = {{ desertbased_proportionalism[num-1] }}$$</b></label>
+       {% endfor %}
+    {% endif %}
+
+</div>
+
+<button style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+</body>
+</html>

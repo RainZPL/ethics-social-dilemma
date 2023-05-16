@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Best Output based on each Ethics Principle</title>
+</head>
+<style>
+  .output {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      margin: auto;
+  }
+</style>
+<body>
+<h1 style="text-align:center"> </h1>
+<h1 style="text-align:center"> </h1>
+<h1 style="text-align:center">Here are Outputs based on each Ethics Principles</h1>
+<h3 style="text-align:center">tip: Click Principles to show explanation</h3>
+<div class="output">
+    <h2 title="For each option, sum up each user's happiness with it, and the option with the highest happiness is the best output."><a href="{{ url_for('utilitarianism_deciding', preference=preference, num_user=num_user, utilitarianism=utilitarianism, happiness=happiness) }}">Utilitarianism</a></h2>
+    {% if utilitarianism is string %}
+        <label>{{ utilitarianism }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ utilitarianism[0] }}</b><br>
+            Highest Total Happiness: <b>{{ utilitarianism[1] }}</b></label><br>
+    {% endif %}
+    <h2 title="Compare the lowest user happiness among each option, and the option with the highest value among these lowest happiness is the best output."><a href="{{ url_for('prioritarianism_deciding', preference=preference, num_user=num_user, prioritarianism=prioritarianism, happiness=happiness) }}">Prioritarianism</a></h2>
+    {% if prioritarianism is string %}
+        <label>{{ prioritarianism }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ prioritarianism[0] }}</b><br>
+            Highest Value among these Minimum Happiness/Utility: <b>{{ prioritarianism[1] }}</b><br>
+            Total Happiness/Utility for the Best Action: <b>{{ prioritarianism[2] }}</b></label><br>
+    {% endif %}
+    <h2 title="For each option, sum up each user's envy then calculate their mean value, and the option with the lowest mean envy is the best output."><a href="{{ url_for('envyfreeness_deciding', preference=preference, num_user=num_user, envyfreeness=envyfreeness, envy=envy) }}">Envy-Freeness</a></h2>
+    {% if envyfreeness[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>{{ envyfreeness[0] }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ envyfreeness[0] }}</b><br>
+            Minimum Mean Envy: <b>{{ envyfreeness[1] }}</b></label><br>
+    {% endif %}
+    <h2 title="The option with more contribution and less luck will be the best output."><a href="{{ url_for('desertbased_deciding', preference=preference, num_user=num_user, desertbased_proportionalism=desertbased_proportionalism, luck=luck, contribution=contribution) }}">DesertBased Proportionalism</a></h2>
+    {% if desertbased_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>{{ desertbased_proportionalism[0] }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ desertbased_proportionalism[0] }}</b><br>
+            The MAX Difference between Contribution and Luck (could be Negative): <b>{{ desertbased_proportionalism[1] }}</b></label><br>
+    {% endif %}
+    <h2 title="The option with the highest contribution value is the best output."><a href="{{ url_for('libertarian_deciding', preference=preference, num_user=num_user, libertarian_proportionalism=libertarian_proportionalism, contribution=contribution) }}">Libertarian Proportionalism</a></h2>
+    {% if libertarian_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>{{ libertarian_proportionalism[0] }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ libertarian_proportionalism[0] }}</b><br>
+            The Highest Contribution: <b>{{ libertarian_proportionalism[1] }}</b></label><br>
+    {% endif %}
+    <h2 title="Choose the outcome with the minimum standard deviation of autonomy among users. If some std are the same, choose the action with highest autonomy."><a href="{{ url_for('egalitarianism_deciding', preference=preference, num_user=num_user, egalitarianism=autonomy_egalitarianism, factor=autonomy, typ='Autonomy') }}">Autonomy Egalitarianism</a></h2>
+    {% if autonomy_egalitarianism[0]  == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>{{ autonomy_egalitarianism[0] }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ autonomy_egalitarianism[0] }}</b><br>
+            The MIN standard deviation between each user: <b>{{ autonomy_egalitarianism[1] }}</b><br>
+            The MAX Autonomy if more than 1 MIN STD: <b>{{ autonomy_egalitarianism[2] }}</b></label><br>
+    {% endif %}
+    <h2 title="Choose the outcome with the minimum standard deviation of harm among users. If some std are the same, choose the action with lowest harm."><a href="{{ url_for('egalitarianism_deciding', preference=preference, num_user=num_user, egalitarianism=nonmaleficence_egalitarianism, factor=harm, typ='Harm') }}">NonMaleficence Egalitarianism</a></h2>
+    {% if nonmaleficence_egalitarianism[0]  == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>{{ nonmaleficence_egalitarianism[0] }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ nonmaleficence_egalitarianism[0] }}</b><br>
+            The MIN standard deviation between each user: <b>{{ nonmaleficence_egalitarianism[1] }}</b><br>
+            The MIN Harm if more than 1 MIN STD: <b>{{ nonmaleficence_egalitarianism[2] }}</b></label><br>
+    {% endif %}
+    <h2 title="Choose the outcome with the minimum standard deviation of opportunity among users. If some std are the same, choose the action with highest opportunity."><a href="{{ url_for('egalitarianism_deciding', preference=preference, num_user=num_user, egalitarianism=equality_opportunity, factor=opportunity, typ='Opportunity') }}">Equality Opportunity</a></h2>
+    {% if equality_opportunity[0]  == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>{{ equality_opportunity[0] }}</label><br>
+    {% else %}
+        <label>Best Action: <b>{{ equality_opportunity[0] }}</b><br>
+            The MIN standard deviation between each user: <b>{{ equality_opportunity[1] }}</b><br>
+            The MAX Opportunity if more than 1 MIN STD: <b>{{ equality_opportunity[2] }}</b></label><br>
+    {% endif %}
+</div>
+<br>
+<form method="post">
+    <div style="text-align:center">
+        <button type="submit" name="back" style="width: 150px;height: 100px;font-size: large; margin-right: 20px;">Back to Homepage</button>
+    </div>
+</form>
+</body>
+</html>

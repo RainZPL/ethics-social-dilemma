@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>happiness for making the best decision</title>
+</head>
+<body>
+<div style="text-align: center;">
+    <h3 >Represents each person’s level of usefulness or satisfaction with different behaviours.</h3>
+    <h3 >For example when deciding the best consumption way:</h3>
+    <img src="{{ url_for('static', filename='image/happiness_deciding.png') }}" alt="happiness_deciding">
+    <h3 >Another an example when deciding the best transport:</h3>
+    <img src="{{ url_for('static', filename='image/happiness_deciding2.png') }}" alt="happiness_deciding2">
+</div>
+
+<button style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+    <meta charset="UTF-8">
+    <title>egalitarianism for deciding the best action</title>
+</head>
+<body>
+<div style="text-align: center;">
+    {% if typ == 'Autonomy' %}
+        <h3 >How to Calculate: Choose the outcome with the minimum standard deviation of autonomy among users. If the amount of minimum STD is more than 1, choose the action with highest autonomy.</h3>
+        <h3 >Limitation: If the amount of minimum STD is more than 1 and the amount of the highest autonomy among these actions is more than 1.</h3>
+    {% elif typ == 'Harm' %}
+        <h3 >How to Calculate: Choose the outcome with the minimum standard deviation of harm among users. If the amount of minimum STD is more than 1, choose the action with lowest harm.</h3>
+        <h3 >Limitation: If the amount of minimum STD is more than 1 and the amount of the lowest harm among these actions is more than 1.</h3>
+    {% elif typ == 'Opportunity' %}
+        <h3 >How to Calculate: Choose the outcome with the minimum standard deviation of Opportunity among users. If the amount of minimum STD is more than 1, choose the action with highest Opportunity.</h3>
+        <h3 >Limitation: If the amount of minimum STD is more than 1 and the amount of the highest opportunity among these actions is more than 1.</h3>
+    {% endif %}
+    <br>
+    {% if egalitarianism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+        <label>This Principle can't give the answer, because:</label>
+        <label><b>The amount of minimum STD is more than 1 and the amount of the {% if typ == 'Autonomy' or typ == 'Opportunity'%}Highest {% elif typ == 'Harm'%}Lowest {% endif %}{{ typ }} in each option is more than 1.</b></label><br>
+        <br>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s {{ typ }}: <b>{{ factor[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>The Mean {{ typ }} for <b>{{ prefer }}</b>: <b>$$\frac{ {{egalitarianism[4][prefer]}} }{ {{ num_user }} } = {{ "%.3f"|format(egalitarianism[4][prefer] / num_user) }}$$</b></label>
+            <label>So,<br>The Standard Deviation for <b>{{ prefer }}</b>: <b>$$\sigma_{ {{ prefer }} } =  \sqrt{\frac{ {% for num in range(0,num_user) %}{% if num == num_user - 1 %}({{ factor[num][prefer] }}-{{ "%.3f"|format(egalitarianism[4][prefer] / num_user) }})^2{% else %}({{ factor[num][prefer] }}-{{ "%.3f"|format(egalitarianism[4][prefer] / num_user) }})^2+{% endif %}{% endfor %} }{ {{ num_user }} }}= {{ egalitarianism[3][prefer] }}$$</b></label>
+            <br>
+        {% endfor %}
+        <label>The minimum STD is <b>{{ egalitarianism[1] }}</b> and has occurred <b>{{ egalitarianism[5] }}</b> times. So, should find the {% if typ == 'Autonomy' or typ == 'Opportunity'%}Highest {% elif typ == 'Harm'%}Lowest {% endif %}{{ typ }} among these actions.</label><br>
+        <label>The {% if typ == 'Autonomy' or typ == 'Opportunity'%}Highest {% elif typ == 'Harm'%}Lowest {% endif %}{{ typ }} is <b>{{ egalitarianism[2] }}</b>, but it has occurred <b>{{ egalitarianism[6] }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+        <br>
+    {% else %}
+        <h3>Here's the Computation:</h3>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s {{ typ }}: <b>{{ factor[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>The Mean {{ typ }} for <b>{{ prefer }}</b>: <b>$$\frac{ {{egalitarianism[4][prefer]}} }{ {{ num_user }} } = {{ "%.3f"|format(egalitarianism[4][prefer] / num_user) }}$$</b></label>
+            <label>So,<br>The Standard Deviation for <b>{{ prefer }}</b>: <b>$$\sigma_{ {{ prefer }} } =  \sqrt{\frac{ {% for num in range(0,num_user) %}{% if num == num_user - 1 %}({{ factor[num][prefer] }}-{{ "%.3f"|format(egalitarianism[4][prefer] / num_user) }})^2{% else %}({{ factor[num][prefer] }}-{{ "%.3f"|format(egalitarianism[4][prefer] / num_user) }})^2+{% endif %}{% endfor %} }{ {{ num_user }} }}= {{ egalitarianism[3][prefer] }}$$</b></label>
+            <br>
+        {% endfor %}
+        {% if egalitarianism[5] > 1%}
+            <label>The Minimum STD is <b>{{ egalitarianism[1] }}</b> and has occurred <b>{{ egalitarianism[5] }}</b> times. So, should find the {% if typ == 'Autonomy' or typ == 'Opportunity'%}Highest {% elif typ == 'Harm'%}Lowest {% endif %}{{ typ }} among these actions.</label><br>
+            <label>The Best Action <b>{{ egalitarianism[0] }}</b> has the {% if typ == 'Autonomy' or typ == 'Opportunity'%}Highest {% elif typ == 'Harm'%}Lowest {% endif %}{{ typ }} <b>{{ egalitarianism[2] }}</b>.</label><br>
+        {% else %}
+            <label>The Best Action <b>{{ egalitarianism[0] }}</b> has Minimum STD <b>{{ egalitarianism[1] }}</b></label><br>
+        {% endif %}
+        <br>
+    {% endif %}
+
+</div>
+
+<button style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+</body>
+</html>

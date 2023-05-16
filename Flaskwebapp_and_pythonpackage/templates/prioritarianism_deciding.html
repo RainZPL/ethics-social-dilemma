@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+    <meta charset="UTF-8">
+    <title>prioritarianism for deciding the best action</title>
+</head>
+<body>
+<div style="text-align: center;">
+    <h3 >How to Calculate: Compare the lowest user happiness/utiliy among each option, and the option with the highest value among these lowest happiness/utility is the best output.</h3>
+    <h3 >Limitation: If the amount of highest value among these lowest happiness/ utility is more than 1.</h3>
+    <br>
+    {% if prioritarianism is string %}
+        <label>This Principle can't give the answer, because:</label>
+        <label><b>The amount of highest value among these lowest happiness/ utility is more than 1.</b></label><br>
+        <br>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Happiness/Utility: <b>{{ happiness[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>The <b>Minimum</b> Happiness/Utility for <b>{{ prefer }}</b>: <b>{{ lowest[prefer] }}</b></label><br>
+            <br>
+        {% endfor %}
+        <label>The <b>Highest</b> Value among these <b>Minimum</b> Happiness/Utility is <b>{{ max_value }}</b>, but it has occurred <b>{{ count }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+        <br>
+    {% else %}
+        <h3>Here's the Computation:</h3>
+        {% for prefer in preference %}
+             <label>For <b>{{ prefer }}:</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Happiness/Utility: <b>{{ happiness[num-1][prefer] }}</b></label><br>
+            {% endfor %}
+            <label>The <b>Minimum</b> Happiness/Utility for <b>{{ prefer }}</b>: <b>{{ lowest[prefer] }}</b></label><br>
+            <br>
+        {% endfor %}
+        <label>The Action <b>{{ prioritarianism[0] }}</b> has the <b>Highest</b> Value among these <b>Minimum</b> Happiness/Utility is <b>{{ max_value }}</b>, and <b>{{ prioritarianism[0] }}</b> could have total <b>{{ prioritarianism[2] }}</b> Happiness/Utility.</label><br>
+        <br>
+    {% endif %}
+</div>
+
+<button style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+</body>
+</html>

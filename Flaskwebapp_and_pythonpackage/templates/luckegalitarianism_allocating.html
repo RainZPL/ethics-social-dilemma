@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+    <meta charset="UTF-8">
+    <title>luck_egalitarianism for allocating resources</title>
+</head>
+<body>
+<div style="text-align: center;">
+    <h3 >How to Calculate: For limited resources, calculate the luck value proportions of users, and flip them as new weight for allocating resources.</h3>
+    <h3 >Limitation: If total Luck is 0, or some users' Luck are the same but after flipping their weights are different.</h3>
+    <br>
+    <label>This Principle can't give the answer, because:</label>
+    {% if luck_egalitarianism is string %}
+        {% if total_luck == 0 %}
+            <label><b>The Luck value for each user are all 0</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Luck: <b>{{ luck[num-1] }}</b></label><br>
+            {% endfor %}
+            <label>Total Luck: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ luck[num] }} = {{ total_luck }}{% else %}{{ luck[num] }} + {% endif %}{% endfor %}</b></label><br>
+            <label>If total Luck is 0, then it means that each user has a proportional weight of 0 and no resources can be allocated.</label><br>
+            <br>
+        {% else %}
+            <label><b>Some users' Luck are the same but after flipping their weights are different, which means unequal allocation.</b></label><br>
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }} Luck: <b>{{ luck[num-1] }}</b></label><br>
+            {% endfor %}
+            {% for num in range(1,num_user + 1) %}
+                <label>User{{ num }}'s Weight: $$\frac{ {{weight[num-1]}} }{ {{ total_luck }} }$$</label>
+            {% endfor %}
+            <br>
+            <label>More Explanation:</label><br>
+            <label>For example, if the factor values are <b>2, 2, 4 and 5 </b>respectively (values are just examples). After the factor values <b>2</b> and <b>5</b> are flipped, the <b>first 2</b>'s weight will be <b>5</b>. If the <b>second 2</b> flips, its weight will be <b>4</b>, therefore, its <b>weight</b> will be <b>different</b> from the <b>first 2</b>. There will be a problem of the <b>same values but different weights</b>, so the calculation cannot continue in this case.</label><br>
+            <br>
+        {% endif %}
+    {% else %}
+        <h3>Here's the Computation:</h3>
+        <label>Quantity Resources: <b>{{ resource_num }}</b></label><br>
+        {% for num in range(1,num_user + 1) %}
+            <label>User{{ num }} Luck: <b>{{ luck[num-1] }}</b></label><br>
+       {% endfor %}
+        <label>Total Luck: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ luck[num] }} = {{ total_luck }}{% else %}{{ luck[num] }} + {% endif %}{% endfor %}</b></label><br>
+        {% for num in range(1,num_user + 1) %}
+            <label>User{{ num }} Luck Proportion: $$\frac{ {{luck[num-1]}} }{ {{ total_luck }} }$$</label>
+       {% endfor %}
+        <br>
+        <label>Flip them, then</label><br>
+        {% for num in range(1,num_user + 1) %}
+            <label>User{{ num }}'s Weight: $$\frac{ {{weight[num-1]}} }{ {{ total_luck }} }$$</label>
+       {% endfor %}
+        <label>So,</label><br>
+        <br>
+        {% for num in range(1,num_user + 1) %}
+            <label>User{{ num }} gets: <b>$$\frac{ {{luck[num-1]}} }{ {{ total_luck }} } &times; {{ resource_num }} = {{ luck_egalitarianism[num-1] }}$$</b></label>
+       {% endfor %}
+    {% endif %}
+
+</div>
+
+<button style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+</body>
+</html>
