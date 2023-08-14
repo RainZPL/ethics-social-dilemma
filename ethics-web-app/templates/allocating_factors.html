@@ -1,0 +1,481 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Input Ethics Principles Factors</title>#}
+{#</head>#}
+{#<style>#}
+{#  .input-group {#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      flex-direction: column;#}
+{#      margin: auto;#}
+{#  }#}
+{#  .input-group input {#}
+{#      font-size: 20px;#}
+{#      margin-right: 20px;#}
+{#  }#}
+{##}
+{#</style>#}
+{##}
+{#<body>#}
+{#<h1 style="text-align:center"> </h1>#}
+{##}
+{#<h1 style="text-align:center">Please Input these Key Factors</h1>#}
+{#<h2 style="text-align:center">tip: Click Factors to show explanation</h2>#}
+{#<h2 style="text-align:center">Input 0 if your Social Scenario isn't reasonable to specific Factors</h2>#}
+{#<h2 style="text-align:center">Leave Empty will be set 0 as default</h2>#}
+{#<br>#}
+{#<h3 style="text-align:center" title="The Name of Resource">Resources: {{resource}}</h3>#}
+{#<h3 style="text-align:center" title="The Quantity of Resource">Quantity: {{ resource_num }}</h3>#}
+{#{% if error %}#}
+{#  <p style="color: red; text-align: center; font-size: large">{{ error }}</p>#}
+{#{% endif %}#}
+{##}
+{#<form method="post">#}
+{#    <div style="display: flex; align-items: center">#}
+{#        {% for num in range(1,num_user) %}#}
+{#            <div class="input-group">#}
+{#                <h2>User{{ num }}</h2>#}
+{#                    <label for="user{{ num }}h" title="The degree to which users prefer or feel good about an action or resources."><a href="{{ url_for('allocating_happiness') }}">Utility/Happiness Value (Range: 0-10 integer):</a></label>#}
+{#                    <input type="number" id="user{{ num }}h" name="user{{ num }}happy" min="0" max="10" step="1" value="0"><br>#}
+{##}
+{#                    <label for="user{{ num }}c" title="The value that users contribute to an action or resources."><a href="{{ url_for('allocating_contribution') }}">Contribution Value (0-10):</a></label>#}
+{#                    <input type="number" id="user{{ num }}c" name="user{{ num }}contribute" min="0" max="10" step="1" value="0"><br>#}
+{##}
+{#                    <label for="user{{ num }}e" title="Representing the extent to which each person feels Envy to others getting resources."><a href="{{ url_for('allocating_envy') }}">Envy Value (0-10):</a></label>#}
+{#                    <input type="number" id="user{{ num }}e" name="user{{ num }}envy" min="0" max="10" step="1" value="0"><br>#}
+{##}
+{#                    <label for="user{{ num }}l" title="The higher value means luckier and more successful. Luck refers to events or factors that a person has no personal control over, such as genetics, family background, economic circumstances, etc."><a href="{{ url_for('allocating_luck') }}">Luck Value (0-10):</a></label>#}
+{#                    <input type="number" id="user{{ num }}l" name="user{{ num }}luck" min="0" max="10" step="1" value="0"><br>#}
+{##}
+{#                    <label for="user{{ num }}a" title="The higher autonomy value refers to the more freedom that people have in making decisions and choices."><a href="{{ url_for('allocating_autonomy') }}">Autonomy Value (0-10):</a></label>#}
+{#                    <input type="number" id="user{{ num }}a" name="user{{ num }}auto" min="0" max="10" step="1" value="0"><br>#}
+{##}
+{#                    <label for="user{{ num }}hm" title="A higher harm value means that the action or decision has a greater risk of causing harm to someone."><a href="{{ url_for('allocating_harm') }}">Harm Value (0-10):</a></label>#}
+{#                    <input type="number" id="user{{ num }}hm" name="user{{ num }}harm" min="0" max="10" step="1" value="0"><br>#}
+{##}
+{#                    <label title="The higher the opportunity value means users enjoy the greater the chance to have the resources or decision."><a href="{{ url_for('allocating_opportunity') }}">Opportunity Value (0-10):</a></label>#}
+{#                    <input type="number" id="user{{ num }}{{ p }}o" name="user{{ num }}{{ p }}oppo" min="0" max="10" step="1" value="0"><br>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#    <button type="submit" style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px">Submit</button>#}
+{#    <button onclick="updateInputs({{ values }})" type="submit" style="display: block; margin: auto; width: 100px;height: 100px; font-size: 20px">Submit</button>#}
+{#</form>#}
+{##}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>deciding the best action</title>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <!-- Core theme CSS (includes Bootstrap)-->
+{#        <link href="{{ url_for('static', filename='css/styles.css') }}">#}
+{#        <!-- Fonts CSS-->#}
+{#        <link rel="stylesheet" href="{{ url_for('static', filename='css/heading.css') }}">#}
+{#        <link rel="stylesheet" href="{{ url_for('static', filename='css/body.css') }}">#}
+        <link href="../static/css/styles.css" rel="stylesheet">
+        <!-- Fonts CSS-->
+        <link rel="stylesheet" href="../static/css/heading.css">
+        <link rel="stylesheet" href="../static/css/body.css">
+        <script>
+
+        window.onload = function() {
+
+            var targetElement = document.getElementById('page-top');
+
+
+            if (targetElement) {
+                targetElement.scrollIntoView();
+            }
+        };
+    </script>
+    </head>
+    <body id="page-top">
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+            <div class="container"><a class="navbar-brand js-scroll-trigger" href="#1">Allocating Resources</a>
+                <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{{ url_for('allocating') }}">BACK to LastPage</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </nav>
+        <section class="page-section portfolio" id="1">
+            <div class="text-center">
+{#            {% if error %}#}
+{#                <h1 style="text-align:center">&nbsp;</h1>#}
+{#                <h1 style="text-align:center">&nbsp;</h1>#}
+{#                <h2 class="page-section-heading text-secondary mb-0 d-inline-block" style="font-size: larger;">{{ error }}</h2>#}
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: larger; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" href="#{{ valueID }}">Go to Fix</a></div>#}
+{#            {% elif error_p %}#}
+{#                <h1 style="text-align:center">&nbsp;</h1>#}
+{#                <h1 style="text-align:center">&nbsp;</h1>#}
+{#                <h2 class="page-section-heading text-secondary mb-0 d-inline-block" style="font-size: larger;">{{ error_p }}</h2>#}
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: larger; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" href="#preference">Go to Fix</a></div>#}
+{#            {% endif %}#}
+            </div>
+            <h1 style="text-align:center">&nbsp;</h1>
+            <h1 style="text-align:center">&nbsp;</h1>
+            <div class="container">
+
+                <div class="text-center">
+                    <h2  style="line-height: normal" class="page-section-heading text-secondary mb-0 d-inline-block">Choose the Satisfied Principles and Input Relevant Factors</h2>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <div class="container d-flex align-items-center flex-column">
+                <h2 style="font-size: xx-large" class="page-section-heading text-secondary text-center mb-0 d-inline-block">Tip: Click Info to Show More Explanation</h2>
+                </div>
+                <br>
+                <h2 style="text-align: center; font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">Input 0 if your Social Scenario isn't reasonable to specific Factors</h2>
+                <br>
+                <br>
+                <div class="container d-flex align-items-center flex-column">
+                <h2 style="text-align: center; font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">Leave Empty will be set 0 as default
+                </h2>
+                </div>
+                <br>
+                <br>
+                <div class="container d-flex align-items-center flex-column">
+                <h2 style="font-size: xx-large" class="page-section-heading text-secondary text-center mb-0 d-inline-block">Ethics Principles List are Shown as Following</h2>
+                </div>
+        </div>
+            <br>
+            <br>
+            <br>
+            <div class="text-center">
+                <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="In addition to your option, you need to evaluate others to input factors">Resources: {{resource}}</h2>
+                <h2></h2>
+                <h2></h2>
+                <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="In addition to your option, you need to evaluate others to input factors">Quantity: {{ resource_num }}</h2>
+
+            </div>
+            <br>
+            <br>
+        <div class="container d-flex align-items-center text-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" href="#ListPrinciples">Choose Your Wanted Principles</a></div>
+        <h1 style="text-align:center">&nbsp;</h1>
+        </section>
+
+
+
+        <form method="post">
+
+         <section class="page-section bg-primary text-white mb-0" id="ListPrinciples">
+            <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block">Ethics Principles List</h2>
+            </div>
+             <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+             </div>
+                <div class="text-center">
+                    <div style="flex-wrap: wrap; justify-content: center; margin-bottom: auto;" class="d-flex align-items-center text-center flex-row">
+                        <h2  class="page-section-heading text-secondary mb-0 d-inline-block">Utilitarianism</h2>
+                        <br>
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="margin-left: 30px; color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#UtilitarianismInfo" href="javascript:void(0)">Info</a>
+                        <br>
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="margin-left: 30px; color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" href="#Consequentialism">Go</a>
+                    </div>
+                <br>
+                <br>
+{#             <div class="text-center">#}
+{#                    <div class="container flex-row d-flex">#}
+{#                        <h2 class="page-section-heading text-secondary mb-0 d-inline-block">Prioritarianism</h2>#}
+{#                        <br>#}
+{#                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="margin-left: 30px; color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#PrioritarianismInfo" href="javascript:void(0)">Info</a>#}
+{#                        <br>#}
+{#                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="margin-left: 30px; color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" href="#Consequentialism">Go</a>#}
+{#                    </div>#}
+{#             </div>#}
+{#             <br>#}
+{#             <br>#}
+{#             <div class="text-center">#}
+                    <div style="flex-wrap: wrap; justify-content: center; margin-bottom: auto;" class="d-flex align-items-center text-center flex-row">
+                        <h2 class="page-section-heading text-secondary mb-0 d-inline-block">Libertarian Proportionalism</h2>
+                        <br>
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="margin-left: 30px; color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#LibertarianInfo" href="javascript:void(0)">Info</a>
+                        <br>
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="margin-left: 30px; color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" href="#Proportionalism">Go</a>
+                    </div>
+             </div>
+             <br>
+             <br>
+             <br>
+             <br>
+             <div class="container d-flex align-items-center flex-column">
+                    <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >If Finished Filling in, Please SUBMIT</button>
+             </div>
+
+        </section>
+
+
+
+            <section class="page-section portfolio" id="Consequentialism">
+            <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block">Utilitarianism's Factor</h2>
+                    <br>
+                    <br>
+                    <h2 class="page-section-heading text-secondary d-inline-block" title="The degree to which users prefer or feel good about an action or resources.">Utility/Happiness Value (range: 0-10 integer):</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#utility" href="javascript:void(0)">Info</a></div>
+            </div>
+             <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+             </div>
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;margin: auto; padding: 20px " >
+
+                        {% for num in range(1,num_user) %}
+                            <div style="width: 100%;flex-basis: 50%;" class="d-flex align-items-center flex-column">
+                                <h2 style="line-height: 60px" class="page-section-heading text-secondary mb-0 d-inline-block">User{{ num }}:</h2><br><br>
+                                <br><br><h2></h2>
+
+{#                                {% for p in fix_prefer %}#}
+{#                                        <h2  class="page-section-heading text-secondary mb-0 d-inline-block">{{ p }}:</h2><br>#}
+                                <input type="number" id="user{{ num }}h" name="user{{ num }}happy" min="0" max="10" step="1" value="0" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none;  width: auto; border: #ba8b00; padding: 5px;  background-color: #ba8b00;  " ><br>
+{#                                        <h2></h2>#}
+{#                                        <h2></h2>#}
+{#                                {% endfor %}#}
+                                <h2></h2>
+                                <h2></h2>
+                                <h2></h2>
+                                <h2></h2>
+                            </div>
+                    {% endfor %}
+
+                </div>
+                <br>
+                <br>
+                <div style="display: flex; align-items: center; text-align: center; flex-wrap: wrap; justify-content: center; margin: 20px; padding: 20px">
+                  <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;  margin: auto;  margin-bottom: 20px;" href="#ListPrinciples">Back to Principle Menu</a>
+                  <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;  margin: auto;  margin-bottom: 20px;" href="#Proportionalism">Next Principle Factor</a>
+                  <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;  margin: auto;  margin-bottom: 20px;" href="#finalsubmit">Just Submit</a>
+                </div>
+        </section>
+
+
+
+            <section class="page-section bg-primary text-white mb-0" id="Proportionalism">
+            <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block">Libertarian Proportionalism's Factor</h2>
+                    <br>
+                    <br>
+                    <h2 class="page-section-heading text-secondary d-inline-block" title="The value that users contribute to an action or resources.">Contribution Value (0-10):</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#contribution" href="javascript:void(0)">Info</a></div>
+{#                    <br>#}
+{#                    <br>#}
+{#                    <h2 class="page-section-heading text-secondary d-inline-block" title="The higher value means luckier and more successful. Luck refers to events or factors that a person has no personal control over, such as genetics, family background, economic circumstances, etc.">Luck Value (0-10) (For Desert-Based Only):</h2>#}
+{#                    <br>#}
+{#                    <br>#}
+{#                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#luck" href="javascript:void(0)">Info</a></div>#}
+            </div>
+             <div class="divider-custom  divider-light">
+                <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+             </div>
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;margin: auto; padding: 20px " >
+
+                        {% for num in range(1,num_user) %}
+                            <div style="width: 100%;flex-basis: 50%;" class="d-flex align-items-center flex-column">
+                                <h2 style="line-height: 60px" class="page-section-heading text-secondary mb-0 d-inline-block">User{{ num }}:</h2><br><br>
+                                <br><br><h2></h2>
+
+
+{#                        {% for p in fix_prefer %}#}
+{#                                <h2  class="page-section-heading text-secondary mb-0 d-inline-block">Contribution for {{ p }}:</h2><br>#}
+                                <input type="number" id="user{{ num }}c" name="user{{ num }}contribute" min="0" max="10" step="1" value="0" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none;  width: auto; border: #ba8b00; padding: 5px;  background-color: #ba8b00;  " ><br>
+{#                            <h2></h2>#}
+{#                            <h2></h2>#}
+{#                        {% endfor %}#}
+{#                        <br>#}
+{#                        <h2  class="page-section-heading text-secondary mb-0 d-inline-block">Luck:</h2><br>#}
+{#                        <input type="number" id="user{{ num }}l" name="user{{ num }}luck" min="0" max="10" step="1" value="0" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none;  width: auto; border: #ba8b00; padding: 5px;  background-color: #ba8b00;  " >#}
+{#                        <br>#}
+{#                        <br>#}
+                            <h2></h2>
+                            <h2></h2>
+                            <h2></h2>
+                            <h2></h2>
+                            </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="container d-flex align-items-center flex-column">
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" href="#ListPrinciples">Back to Principle Menu</a>
+
+                </div>
+            <br>
+            <br>
+            <h2></h2>
+                <h2></h2>
+                <h2></h2>
+                <div class="container d-flex align-items-center flex-column">
+                    <button id="finalsubmit" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button>
+                </div>
+        </section>
+
+
+
+ <div class="portfolio-modal modal fade" id="utility" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Utility/Happiness for Allocating Resources</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">Represents each user’s level of usefulness or satisfaction with resources.</p>
+                                    <p class="mb-5" style="font-size: larger">For example when allocating Water resource:</p>
+                                    <img class="img-fluid rounded mb-5" src="{{ url_for('static', filename='image/allocating_happiness.png') }}" alt="allocating_happiness"/>
+{#                                    <p class="mb-5" style="font-size: larger">Another an example when deciding the best transport:</p>#}
+{#                                    <img class="img-fluid rounded mb-5" src="{{ url_for('static', filename='image/happiness_deciding2.png') }}" alt="happiness_deciding2"/>#}
+
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            <div class="portfolio-modal modal fade" id="contribution" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Contribution for Allocating Resources</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">Representing the extent to which each person is willing to pay for resources.</p>
+                                    <p class="mb-5" style="font-size: larger">For example when allocating Coal resources:</p>
+                                    <img class="img-fluid rounded mb-5" src="{{ url_for('static', filename='image/allocating_contribution.png') }}" alt="allocating_contribution"/>
+{#                                    <p class="mb-5" style="font-size: larger">When Deciding the Housework:</p>#}
+{#                                    <img class="img-fluid rounded mb-5" src="{{ url_for('static', filename='image/contribution_deciding2.png') }}" alt="contribution_deciding2"/>#}
+
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="portfolio-modal modal fade" id="UtilitarianismInfo" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the Utility or Happiness of users as a measure of morality. When an action maximises the total Utility/Happiness, it is
+                                                        ethical and the best output. Utility encompasses the pursuit of Happiness and the ability to stop or lessen
+                                                        unhappy outcomes.<br>
+                                                        E.g.<br>
+                                                        For limited resources, allocate resources proportionally according to the Utility/Happiness of the users.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+                <div class="portfolio-modal modal fade" id="LibertarianInfo" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the Contribution of users to an object as a measure of
+                                                                morality. It focuses on the stakeholders contributing most to the
+                                                                goal.<br>
+                                                                    E.g.<br>
+                                                                    UserA and UserB earn from a product they create. They should
+                                                                    each receive a share of the profits equivalent to their Contribution,
+                                                                    which might have been labour, funds, or other resources. UserA
+                                                                    should receive 60% of the earnings, and UserB should receive 40%
+                                                                    if UserA contributed 60% of the work and UserB contributed 40%
+                                                                    of the effort.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        </form>
+
+
+        <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
+        <div class="scroll-to-top d-lg-none position-fixed"><a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a></div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+{#        <script src="{{ url_for('static', filename='assets/mail/jqBootstrapValidation.js') }}"></script>#}
+{#        <script src="{{ url_for('static', filename='assets/mail/contact_me.js') }}"></script>#}
+        <!-- Core theme JS-->
+        <script src="../static/js/scripts.js"></script>
+    </body>
+</html>

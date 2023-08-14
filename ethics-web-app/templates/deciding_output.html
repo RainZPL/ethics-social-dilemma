@@ -1,0 +1,691 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Your Best Output based on each Ethics Principle</title>#}
+{#</head>#}
+{#<style>#}
+{#  .output {#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      flex-direction: column;#}
+{#      margin: auto;#}
+{#  }#}
+{#</style>#}
+{#<body>#}
+{#<h1 style="text-align:center"> </h1>#}
+{#<h1 style="text-align:center"> </h1>#}
+{#<h1 style="text-align:center">Here are Outputs based on each Ethics Principles</h1>#}
+{#<h3 style="text-align:center">tip: Click Principles to show explanation</h3>#}
+{#<div class="output">#}
+{#    <h2 title="For each option, sum up each user's happiness with it, and the option with the highest happiness is the best output."><a href="{{ url_for('utilitarianism_deciding', preference=preference, num_user=num_user, utilitarianism=utilitarianism, happiness=happiness) }}">Utilitarianism</a></h2>#}
+{#    {% if utilitarianism is string %}#}
+{#        <label>{{ utilitarianism }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ utilitarianism[0] }}</b><br>#}
+{#            Highest Total Happiness: <b>{{ utilitarianism[1] }}</b></label><br>#}
+{#    {% endif %}#}
+{#    <h2 title="Compare the lowest user happiness among each option, and the option with the highest value among these lowest happiness is the best output."><a href="{{ url_for('prioritarianism_deciding', preference=preference, num_user=num_user, prioritarianism=prioritarianism, happiness=happiness) }}">Prioritarianism</a></h2>#}
+{#    {% if prioritarianism is string %}#}
+{#        <label>{{ prioritarianism }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ prioritarianism[0] }}</b><br>#}
+{#            Highest Value among these Minimum Happiness/Utility: <b>{{ prioritarianism[1] }}</b><br>#}
+{#            Total Happiness/Utility for the Best Action: <b>{{ prioritarianism[2] }}</b></label><br>#}
+{#    {% endif %}#}
+{#    <h2 title="For each option, sum up each user's envy then calculate their mean value, and the option with the lowest mean envy is the best output."><a href="{{ url_for('envyfreeness_deciding', preference=preference, num_user=num_user, envyfreeness=envyfreeness, envy=envy) }}">Envy-Freeness</a></h2>#}
+{#    {% if envyfreeness[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}#}
+{#        <label>{{ envyfreeness[0] }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ envyfreeness[0] }}</b><br>#}
+{#            Minimum Mean Envy: <b>{{ envyfreeness[1] }}</b></label><br>#}
+{#    {% endif %}#}
+{#    <h2 title="The option with more contribution and less luck will be the best output."><a href="{{ url_for('desertbased_deciding', preference=preference, num_user=num_user, desertbased_proportionalism=desertbased_proportionalism, luck=luck, contribution=contribution) }}">DesertBased Proportionalism</a></h2>#}
+{#    {% if desertbased_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}#}
+{#        <label>{{ desertbased_proportionalism[0] }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ desertbased_proportionalism[0] }}</b><br>#}
+{#            The MAX Difference between Contribution and Luck (could be Negative): <b>{{ desertbased_proportionalism[1] }}</b></label><br>#}
+{#    {% endif %}#}
+{#    <h2 title="The option with the highest contribution value is the best output."><a href="{{ url_for('libertarian_deciding', preference=preference, num_user=num_user, libertarian_proportionalism=libertarian_proportionalism, contribution=contribution) }}">Libertarian Proportionalism</a></h2>#}
+{#    {% if libertarian_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}#}
+{#        <label>{{ libertarian_proportionalism[0] }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ libertarian_proportionalism[0] }}</b><br>#}
+{#            The Highest Contribution: <b>{{ libertarian_proportionalism[1] }}</b></label><br>#}
+{#    {% endif %}#}
+{#    <h2 title="Choose the outcome with the minimum standard deviation of autonomy among users. If some std are the same, choose the action with highest autonomy."><a href="{{ url_for('egalitarianism_deciding', preference=preference, num_user=num_user, egalitarianism=autonomy_egalitarianism, factor=autonomy, typ='Autonomy') }}">Autonomy Egalitarianism</a></h2>#}
+{#    {% if autonomy_egalitarianism[0]  == 'This Principle CAN NOT give the BEST output. Please try another.' %}#}
+{#        <label>{{ autonomy_egalitarianism[0] }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ autonomy_egalitarianism[0] }}</b><br>#}
+{#            The MIN standard deviation between each user: <b>{{ autonomy_egalitarianism[1] }}</b><br>#}
+{#            The MAX Autonomy if more than 1 MIN STD: <b>{{ autonomy_egalitarianism[2] }}</b></label><br>#}
+{#    {% endif %}#}
+{#    <h2 title="Choose the outcome with the minimum standard deviation of harm among users. If some std are the same, choose the action with lowest harm."><a href="{{ url_for('egalitarianism_deciding', preference=preference, num_user=num_user, egalitarianism=nonmaleficence_egalitarianism, factor=harm, typ='Harm') }}">NonMaleficence Egalitarianism</a></h2>#}
+{#    {% if nonmaleficence_egalitarianism[0]  == 'This Principle CAN NOT give the BEST output. Please try another.' %}#}
+{#        <label>{{ nonmaleficence_egalitarianism[0] }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ nonmaleficence_egalitarianism[0] }}</b><br>#}
+{#            The MIN standard deviation between each user: <b>{{ nonmaleficence_egalitarianism[1] }}</b><br>#}
+{#            The MIN Harm if more than 1 MIN STD: <b>{{ nonmaleficence_egalitarianism[2] }}</b></label><br>#}
+{#    {% endif %}#}
+{#    <h2 title="Choose the outcome with the minimum standard deviation of opportunity among users. If some std are the same, choose the action with highest opportunity."><a href="{{ url_for('egalitarianism_deciding', preference=preference, num_user=num_user, egalitarianism=equality_opportunity, factor=opportunity, typ='Opportunity') }}">Equality Opportunity</a></h2>#}
+{#    {% if equality_opportunity[0]  == 'This Principle CAN NOT give the BEST output. Please try another.' %}#}
+{#        <label>{{ equality_opportunity[0] }}</label><br>#}
+{#    {% else %}#}
+{#        <label>Best Action: <b>{{ equality_opportunity[0] }}</b><br>#}
+{#            The MIN standard deviation between each user: <b>{{ equality_opportunity[1] }}</b><br>#}
+{#            The MAX Opportunity if more than 1 MIN STD: <b>{{ equality_opportunity[2] }}</b></label><br>#}
+{#    {% endif %}#}
+{#</div>#}
+{#<br>#}
+{#<form method="post">#}
+{#    <div style="text-align:center">#}
+{#        <button type="submit" name="back" style="width: 150px;height: 100px;font-size: large; margin-right: 20px;">Back to Homepage</button>#}
+{#    </div>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Your Best Output</title>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../static/css/styles.css" rel="stylesheet">
+        <!-- Fonts CSS-->
+        <link rel="stylesheet" href="../static/css/heading.css">
+        <link rel="stylesheet" href="../static/css/body.css">
+    </head>
+    <body id="page-top">
+    <form method="post">
+
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+
+            <div class="container"><a class="navbar-brand js-scroll-trigger" href="#portfolio">Deciding the Best Action Output</a>
+                <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{{ url_for('deciding_factors', preference=preference, fix_prefer=fix_prefer, num_user=num_user + 1) }}">BACK to LastPage</a>
+                        </li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{{ url_for('hello_world') }}">BACK to Homepage</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="page-section portfolio" id="portfolio">
+            <div class="text-center">
+
+            </div>
+            <h1 style="text-align:center">&nbsp;</h1>
+            <h1 style="text-align:center">&nbsp;</h1>
+            <div class="container">
+                <!-- Portfolio Section Heading-->
+                <div class="text-center">
+                    <h2 style="line-height: normal" class="page-section-heading text-secondary mb-0 d-inline-block">Here are Outputs based on each Ethics Principles</h2>
+                    <br>
+                    <br>
+                    <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">tip: Click Info to show Principles explanation</h2>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" href="#utilitarianism">Show Outputs</a></div>
+
+        </div>
+            <h1 style="text-align:center">&nbsp;</h1>
+        </section>
+
+
+        <section class="page-section bg-primary text-white mb-0" id="utilitarianism">
+            <div class="container">
+                <!-- About Section Heading-->
+                <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="For each option, sum up each user's happiness with it, and the option with the highest happiness is the best output.">Utilitarianism</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#Utilitarianism" href="javascript:void(0)">Info</a></div>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#portfolioModal0" href="javascript:void(0)">Info</a> </div>#}
+{#                <br>#}
+                <div class="text-center">
+                        {% if utilitarianism is string %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">{{ utilitarianism }}</h2><br>
+                        {% else %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">Best Action: <b>{{ utilitarianism[0] }}</b><br>Highest Total Happiness: <b>{{ utilitarianism[1] }}</b></h2><br>
+                        {% endif %}
+                        <br>
+                        <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" data-toggle="modal" data-target="#UtilitarianismEX" href="javascript:void(0)">Explanation</a></div>
+                </div>
+                <br>
+            <br>
+            <br>
+
+            <div class="container d-flex align-items-center text-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" href="#prioritarianism">Show Next Output</a></div>
+{#            <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button></div>#}
+            </div>
+
+        </section>
+
+
+        <section class="page-section portfolio" id="prioritarianism">
+            <div class="container">
+                <!-- About Section Heading-->
+                <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="Compare the lowest user happiness among each option, and the option with the highest value among these lowest happiness is the best output.">Prioritarianism</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#Prioritarianism" href="javascript:void(0)">Info</a></div>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#portfolioModal0" href="javascript:void(0)">Info</a> </div>#}
+{#                <br>#}
+                <div class="text-center">
+                        {% if prioritarianism is string %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">{{ prioritarianism }}</h2><br>
+                        {% else %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">Best Action: <b>{{ prioritarianism[0] }}</b><br>
+                                Highest Value among these Minimum Happiness/Utility: <b>{{ prioritarianism[1] }}</b><br>
+                                Total Happiness/Utility for the Best Action: <b>{{ prioritarianism[2] }}</b></h2><br>
+                        {% endif %}
+                        <br>
+                        <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" data-toggle="modal" data-target="#PrioritarianismEX" href="javascript:void(0)">Explanation</a></div>
+                </div>
+                <br>
+            <br>
+            <br>
+
+            <div class="container d-flex align-items-center text-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" href="#libertarian">Show Next Output</a></div>
+{#            <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button></div>#}
+            </div>
+        </section>
+
+
+
+        <section class="page-section bg-primary text-white mb-0" id="libertarian">
+            <div class="container">
+                <!-- About Section Heading-->
+                <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="The option with the highest contribution value is the best output.">Libertarian Proportionalism</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#Libertarian" href="javascript:void(0)">Info</a></div>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#portfolioModal0" href="javascript:void(0)">Info</a> </div>#}
+{#                <br>#}
+                <div class="text-center">
+                    {% if libertarian_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">{{ libertarian_proportionalism[0] }}</h2><br>
+                    {% else %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">Best Action: <b>{{ libertarian_proportionalism[0] }}</b><br>
+                            The Highest Contribution: <b>{{ libertarian_proportionalism[1] }}</b></h2><br>
+                        {% endif %}
+                        <br>
+                        <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" data-toggle="modal" data-target="#LibertarianEX" href="javascript:void(0)">Explanation</a></div>
+                </div>
+                <br>
+            <br>
+            <br>
+
+            <div class="container d-flex align-items-center text-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" href="#desert-based">Show Next Output</a></div>
+{#            <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button></div>#}
+
+            </div>
+        </section>
+
+
+
+        <section class="page-section portfolio" id="desert-based">
+            <div class="container">
+                <!-- About Section Heading-->
+                <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="The option with more contribution and less luck will be the best output.">Desert-Based Proportionalism</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#Desert-Based" href="javascript:void(0)">Info</a></div>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#portfolioModal0" href="javascript:void(0)">Info</a> </div>#}
+{#                <br>#}
+                <div class="text-center">
+                    {% if desertbased_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">{{ desertbased_proportionalism[0] }}</h2><br>
+                    {% else %}
+                        <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">Best Action: <b>{{ desertbased_proportionalism[0] }}</b><br>
+                            The MAX Difference between Contribution and Luck (could be Negative): <b>{{ desertbased_proportionalism[1] }}</b></h2><br>
+                    {% endif %}
+                        <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" data-toggle="modal" data-target="#Desert-BasedEX" href="javascript:void(0)">Explanation</a></div>
+                </div>
+                <br>
+            <br>
+            <br>
+
+            <div class="container d-flex align-items-center text-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #6f42c1; padding: 5px;  background-color: #6f42c1;" href="{{ url_for('hello_world') }}">BACK to Homepage</a></div>
+{#            <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button></div>#}
+
+            </div>
+        </section>
+
+
+
+{#        <section class="page-section bg-primary text-white mb-0" id="AutonomyEgalitarianism">#}
+{#            <div class="container">#}
+{#                <!-- About Section Heading-->#}
+{#                <div class="text-center">#}
+{#                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="The option with the highest contribution value is the best output.">Libertarian Proportionalism</h2>#}
+{#                    <br>#}
+{#                    <br>#}
+{#                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#Libertarian" href="javascript:void(0)">Info</a></div>#}
+{#                </div>#}
+{#                <!-- Icon Divider-->#}
+{#                <div class="divider-custom divider-light">#}
+{#                    <div class="divider-custom-line"></div>#}
+{#                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>#}
+{#                    <div class="divider-custom-line"></div>#}
+{#                </div>#}
+{#                <!-- About Section Content-->#}
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#portfolioModal0" href="javascript:void(0)">Info</a> </div>#}
+{#                <br>#}
+{#                <div class="text-center">#}
+{#                    {% if libertarian_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}#}
+{#                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">{{ libertarian_proportionalism[0] }}</h2><br>#}
+{#                    {% else %}#}
+{#                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">Best Action: <b>{{ libertarian_proportionalism[0] }}</b><br>#}
+{#                            The Highest Contribution: <b>{{ libertarian_proportionalism[1] }}</b></h2><br>#}
+{#                        {% endif %}#}
+{#                        <br>#}
+{#                        <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" data-toggle="modal" data-target="#LibertarianEX" href="javascript:void(0)">Explanation</a></div>#}
+{#                </div>#}
+{#                <br>#}
+{#            <br>#}
+{#            <br>#}
+{#        <div class="container d-flex align-items-center flex-column">#}
+{#            <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" href="#desert-based">Show Next Output</a></div>#}
+{#            <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button></div>#}
+{#            </div>#}
+{#            </div>#}
+{#        </section>#}
+
+
+
+        <div class="portfolio-modal modal fade" id="Utilitarianism" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the Utility or Happiness of users as a measure of morality. When an action maximises the total Utility/Happiness, it is
+                                                        ethical and the best output. Utility encompasses the pursuit of Happiness and the ability to stop or lessen
+                                                        unhappy outcomes.<br>
+                                                        E.g.<br>
+                                                        Calculate the Utility/Happiness for each person for each outcome,
+                                                        add them all together, and then select the result with the maximum value.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="portfolio-modal modal fade" id="UtilitarianismEX" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Utilitarianism for deciding the best action</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">How to Calculate: For each option, sum up each user's utility/happiness with it, and the option with the highest total happiness/utility is the best output.</p>
+                                    <p class="mb-5" style="font-size: larger">Limitation: If the amount of highest total happiness/utility is more than 1.</p>
+                                    {% if utilitarianism is string %}
+                                        <label>This Principle can't give the answer, because:</label>
+                                        <label><b>The amount of highest total happiness/utility is more than 1.</b></label><br>
+                                        <br>
+                                        {% for prefer in preferenceList %}
+                                             <label>For <b>{{ prefer }}:</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Happiness/Utility: <b>{{ happiness[num-1][prefer] }}</b></label><br>
+                                            {% endfor %}
+                                            <label>Total Happiness/Utility for <b>{{ prefer }}</b>: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ happiness[num][prefer] }} = {{ total_happiness[prefer] }}{% else %}{{ happiness[num][prefer] }} + {% endif %}{% endfor %}</b></label><br>
+                                            <br>
+                                        {% endfor %}
+                                        <label>The Highest Total Happiness/Utility is <b>{{ max_happiness }}</b>, but it has occurred <b>{{ count_happiness }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+                                        <br>
+                                    {% else %}
+                                        <h3>Here's the Computation:</h3>
+                                        {% for prefer in preferenceList %}
+                                             <label>For <b>{{ prefer }}:</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Happiness/Utility: <b>{{ happiness[num-1][prefer] }}</b></label><br>
+                                            {% endfor %}
+                                            <label>Total Happiness/Utility for <b>{{ prefer }}</b>: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ happiness[num][prefer] }} = {{ total_happiness[prefer] }}{% else %}{{ happiness[num][prefer] }} + {% endif %}{% endfor %}</b></label><br>
+                                            <br>
+                                        {% endfor %}
+                                        <label>The Action <b>{{ utilitarianism[0] }}</b> has Highest Total Happiness/Utility <b>{{ max_happiness }}</b>.</label><br>
+                                        <br>
+                                    {% endif %}
+
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="portfolio-modal modal fade" id="Libertarian" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the Contribution of users to an object as a measure of
+                                                                morality. It focuses on the stakeholders contributing most to the
+                                                                goal.<br>
+                                                                    E.g.<br>
+                                                                    UserA and UserB earn from a product they create. They should
+                                                                    each receive a share of the profits equivalent to their Contribution,
+                                                                    which might have been labour, funds, or other resources. UserA
+                                                                    should receive 60% of the earnings, and UserB should receive 40%
+                                                                    if UserA contributed 60% of the work and UserB contributed 40%
+                                                                    of the effort.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="portfolio-modal modal fade" id="LibertarianEX" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Libertarian Proportionalism for deciding the best action</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">How to Calculate: The option with the Highest Contribution value is the best output.</p>
+                                    <p class="mb-5" style="font-size: larger">Limitation: If the amount of the highest contribution value in each option is more than 1.</p>
+                                   {% if libertarian_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+                                        <label>This Principle can't give the answer, because:</label>
+                                        <label><b>The amount of the highest contribution value in each option is more than 1.</b></label><br>
+                                        <br>
+                                        {% for prefer in preferenceList %}
+                                             <label>For <b>{{ prefer }}:</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1][prefer] }}</b></label><br>
+                                            {% endfor %}
+                                            <label>So,<br>The Highest Contribution for <b>{{ prefer }}</b>: <b>{{ libertarian_proportionalism[2][prefer] }}</b><br></label><br>
+                                        {% endfor %}
+                                        <label>The Highest Contribution is <b>{{ libertarian_proportionalism[1] }}</b>, but it has occurred <b>{{ libertarian_proportionalism[3] }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+                                        <br>
+                                    {% else %}
+                                        <h3>Here's the Computation:</h3>
+                                        {% for prefer in preferenceList %}
+                                             <label>For <b>{{ prefer }}:</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1][prefer] }}</b></label><br>
+                                            {% endfor %}
+                                            <label>So,<br>The Highest Contribution for <b>{{ prefer }}</b>: <b>{{ libertarian_proportionalism[2][prefer] }}</b><br></label><br>
+                                        {% endfor %}
+                                        <label>The Action <b>{{ libertarian_proportionalism[0] }}</b> has Highest Contribution <b>{{ libertarian_proportionalism[1] }}</b>.</label><br>
+                                        <br>
+                                    {% endif %}
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="portfolio-modal modal fade" id="Prioritarianism" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the disadvantaged groups with lower Utility/Happiness
+                                                                    as the priority. It is a strategy in which
+                                                                    the minimum Utility/Happiness gets maximised (improving the
+                                                                    worst-case scenario).<br>
+                                                                    E.g.<br>
+                                                                    Discover the Utility/Happiness of each person and each result.
+                                                                    Pick the result that has the maximised minimal Utility/Happiness.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <div class="portfolio-modal modal fade" id="PrioritarianismEX" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Prioritarianism for deciding the best action</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">How to Calculate: Compare the lowest user happiness/utiliy among each option, and the option with the highest value among these lowest happiness/utility is the best output.</p>
+                                    <p class="mb-5" style="font-size: larger">Limitation: If the amount of highest value among these lowest happiness/ utility is more than 1.</p>
+                                   {% if prioritarianism is string %}
+                                        <label>This Principle can't give the answer, because:</label>
+                                        <label><b>The amount of highest value among these lowest happiness/ utility is more than 1.</b></label><br>
+                                        <br>
+                                        {% for prefer in preferenceList %}
+                                             <label>For <b>{{ prefer }}:</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Happiness/Utility: <b>{{ happiness[num-1][prefer] }}</b></label><br>
+                                            {% endfor %}
+                                            <label>The <b>Minimum</b> Happiness/Utility for <b>{{ prefer }}</b>: <b>{{ lowestPri[prefer] }}</b></label><br>
+                                            <br>
+                                        {% endfor %}
+                                        <label>The <b>Highest</b> Value among these <b>Minimum</b> Happiness/Utility is <b>{{ max_valuePri }}</b>, but it has occurred <b>{{ countPri }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+                                        <br>
+                                    {% else %}
+                                        <h3>Here's the Computation:</h3>
+                                        {% for prefer in preferenceList %}
+                                             <label>For <b>{{ prefer }}:</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Happiness/Utility: <b>{{ happiness[num-1][prefer] }}</b></label><br>
+                                            {% endfor %}
+                                            <label>The <b>Minimum</b> Happiness/Utility for <b>{{ prefer }}</b>: <b>{{ lowestPri[prefer] }}</b></label><br>
+                                            <br>
+                                        {% endfor %}
+                                        <label>The Action <b>{{ prioritarianism[0] }}</b> has the <b>Highest</b> Value among these <b>Minimum</b> Happiness/Utility is <b>{{ max_valuePri }}</b>, and <b>{{ prioritarianism[0] }}</b> could have total <b>{{ prioritarianism[2] }}</b> Happiness/Utility.</label><br>
+                                        <br>
+                                    {% endif %}
+
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="portfolio-modal modal fade" id="Desert-Based" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the Contribution of users and their Luck as measures
+                                                                of morality. It prioritises stakeholders who contribute more and
+                                                                have less Luck.<br>
+                                                                    E.g.<br>
+                                                                   The example above, however, takes into account luck. User A
+                                                                    may have made 70% of the Contribution, but he/she may have
+                                                                    also been significantly luckier than User B (for instance, User A
+                                                                    was born quite wealthy). As a result, Luck’s impact should be
+                                                                    considered while calculating Contribution.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="portfolio-modal modal fade" id="Desert-BasedEX" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Desert-Based Proportionalism for deciding the best action</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">How to Calculate: The option with more contribution and less luck will be the best output.</p>
+                                    <p class="mb-5" style="font-size: larger">Limitation: If the amount of the highest difference between Contribution and Luck in each option is more than 1.</p>
+                                   {% if desertbased_proportionalism[0] == 'This Principle CAN NOT give the BEST output. Please try another.' %}
+                                       <label>This Principle can't give the answer, because:</label>
+                                                <label><b>The amount of the highest difference between Contribution and Luck in each option is more than 1.</b></label><br>
+                                                <br>
+                                                <label>{% for num in range(1,num_user + 1) %}User{{ num }}'s Luck: <b>{{ luck[num-1] }}</b><br>{% endfor %}</label><br>
+                                                {% for prefer in preferenceList %}
+                                             <label>For <b>{{ prefer }}:</b></label><br>
+                                        {% for num in range(1,num_user + 1) %}
+                                            <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1][prefer] }}</b></label><br>
+                                        {% endfor %}
+                                        <label>{% for num in range(1,num_user + 1) %}The Difference (Contribution - Luck) for User{{ num }}: <b>{{ contribution[num-1][prefer] }} - {{ luck[num-1] }} = {{ contribution[num-1][prefer] - luck[num-1] }}</b><br>{% endfor %}</label><br>
+                                    {% endfor %}
+                                    <label>The Highest Difference between Contribution and Luck is <b>{{ desertbased_proportionalism[1] }}</b>, but it has occurred <b>{{ desertbased_proportionalism[3] }}</b> times (more than ONE) among these Actions. So it can not decide the best Action.</label><br>
+                                    <br>
+                                {% else %}
+                                    <h3>Here's the Computation:</h3>
+                                    <label>{% for num in range(1,num_user + 1) %}User{{ num }}'s Luck: <b>{{ luck[num-1] }}</b><br>{% endfor %}</label><br>
+                                    {% for prefer in preferenceList %}
+                                         <label>For <b>{{ prefer }}:</b></label><br>
+                                        {% for num in range(1,num_user + 1) %}
+                                            <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1][prefer] }}</b></label><br>
+                                        {% endfor %}
+                                        <label>{% for num in range(1,num_user + 1) %}The Difference (Contribution - Luck) for User{{ num }}: <b>{{ contribution[num-1][prefer] }} - {{ luck[num-1] }} = {{ contribution[num-1][prefer] - luck[num-1] }}</b><br>{% endfor %}</label><br>
+                                    {% endfor %}
+                                    <label>The Action <b>{{ desertbased_proportionalism[0] }}</b> has Highest Difference between Contribution and Luck with value <b>{{ desertbased_proportionalism[1] }}</b>.</label><br>
+                                    <br>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        </form>
+        <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
+        <div class="scroll-to-top d-lg-none position-fixed"><a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a></div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+        <script src="assets/mail/jqBootstrapValidation.js"></script>
+        <script src="assets/mail/contact_me.js"></script>
+        <!-- Core theme JS-->
+        <script src="../static/js/scripts.js"></script>
+    </body>
+</html>

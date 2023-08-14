@@ -1,0 +1,420 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Allocated Resources based on each Ethics Principle</title>#}
+{#</head>#}
+{#<style>#}
+{#  .output {#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      flex-direction: column;#}
+{#      margin: auto;#}
+{#  }#}
+{#</style>#}
+{#<body>#}
+{#<h1 style="text-align:center"> </h1>#}
+{#<h1 style="text-align:center"> </h1>#}
+{#<h1 style="text-align:center">Here are Outputs based on each Ethics Principles</h1>#}
+{#<h3 style="text-align:center">tip: Click Principles to show explanation</h3>#}
+{#<div class="output">#}
+{#    <h2 title="For limited resources, allocate resources proportionally according to the utility/happiness of the users."><a href="{{ url_for('utilitarianism_allocating', resource_num=resource_num, resource=resource, num_user=num_user, utilitarianism=utilitarianism, happiness=happiness) }}">Utilitarianism</a></h2>#}
+{#    {% if utilitarianism is string %}#}
+{#        <label>{{ utilitarianism }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ utilitarianism[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#    <h2 title="For limited resources, sort each user’s Envy, and flip each Envy as new proportions weight for allocating resources."><a href="{{ url_for('envyfreeness_allocating', resource_num=resource_num, resource=resource, num_user=num_user, envyfreeness=envyfreeness, envy=envy) }}">Envy-Freeness</a></h2>#}
+{#    {% if envyfreeness is string %}#}
+{#        <label>{{ envyfreeness }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ envyfreeness[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#    <h2 title="Calculate the value of contribution – luck for each user. Then allocate resources proportionally according to the difference."><a href="{{ url_for('desertbased_allocating', resource_num=resource_num, resource=resource, num_user=num_user, desertbased_proportionalism=desertbased_proportionalism, contribution=contribution, luck=luck) }}">DesertBased Proportionalism</a></h2>#}
+{#    {% if desertbased_proportionalism is string %}#}
+{#        <label>{{ desertbased_proportionalism }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ desertbased_proportionalism[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#    <h2 title="For limited resources, allocate resources proportionally according to the contribution of the users."><a href="{{ url_for('libertarian_allocating', resource_num=resource_num, resource=resource, num_user=num_user, libertarian_proportionalism=libertarian_proportionalism, contribution=contribution) }}">Libertarian Proportionalism</a></h2>#}
+{#    {% if libertarian_proportionalism is string %}#}
+{#        <label>{{ libertarian_proportionalism }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ libertarian_proportionalism[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#    <h2 title="For limited resources, calculate the luck value proportions of users and flip them as the weight of allocating resources."><a href="{{ url_for('luckegalitarianism_allocating', resource_num=resource_num, resource=resource, num_user=num_user, luck_egalitarianism=luck_egalitarianism, luck=luck) }}">Luck Egalitarianism</a></h2>#}
+{#    {% if luck_egalitarianism is string %}#}
+{#        <label>{{ luck_egalitarianism }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ luck_egalitarianism[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#    <h2 title="For limited resources, allocate resources proportionally according to the Autonomy of the users."><a href="{{ url_for('autonomyegalitarianism_allocating', resource_num=resource_num, resource=resource, num_user=num_user, autonomy_egalitarianism=autonomy_egalitarianism, autonomy=autonomy) }}">Autonomy Egalitarianism</a></h2>#}
+{#    {% if autonomy_egalitarianism is string %}#}
+{#        <label>{{ autonomy_egalitarianism }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ autonomy_egalitarianism[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#    <h2 title="For limited resources, allocate resources proportionally according to the Harm of the users."><a href="{{ url_for('nonmaleficence_allocating', resource_num=resource_num, resource=resource, num_user=num_user, nonmaleficence_egalitarianism=nonmaleficence_egalitarianism, harm=harm) }}">NonMaleficence Egalitarianism</a></h2>#}
+{#    {% if nonmaleficence_egalitarianism is string %}#}
+{#        <label>{{ nonmaleficence_egalitarianism }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ nonmaleficence_egalitarianism[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#    <h2 title="For limited resources, allocate resources proportionally according to the Opportunity of the users."><a href="{{ url_for('equalityopportunity_allocating', resource_num=resource_num, resource=resource, num_user=num_user, equality_opportunity=equality_opportunity, opportunity=opportunity) }}">Equality Opportunity</a></h2>#}
+{#    {% if equality_opportunity is string %}#}
+{#        <label>{{ equality_opportunity }}</label><br>#}
+{#    {% else %}#}
+{#        {% for num in range(1,num_user + 1) %}#}
+{#            <label>User{{ num }}: <b>{{ equality_opportunity[num-1] }}</b><br></label><br>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#</div>#}
+{#<br>#}
+{#<form method="post">#}
+{#    <div style="text-align:center">#}
+{#        <button type="submit" name="back" style="width: 150px;height: 100px;font-size: large; margin-right: 20px;">Back to Homepage</button>#}
+{#    </div>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Your Best Output</title>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"></script>
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../static/css/styles.css" rel="stylesheet">
+        <!-- Fonts CSS-->
+        <link rel="stylesheet" href="../static/css/heading.css">
+        <link rel="stylesheet" href="../static/css/body.css">
+    </head>
+    <body id="page-top">
+    <form method="post">
+
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+
+            <div class="container"><a class="navbar-brand js-scroll-trigger" href="#portfolio">Allocating Resources Output</a>
+                <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{{ url_for('allocating_factors', resource=resource, resource_num=resource_num, num_user=num_user + 1) }}">BACK to LastPage</a>
+                        </li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{{ url_for('hello_world') }}">BACK to Homepage</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="page-section portfolio" id="portfolio">
+            <div class="text-center">
+
+            </div>
+            <h1 style="text-align:center">&nbsp;</h1>
+            <h1 style="text-align:center">&nbsp;</h1>
+            <div class="container">
+                <!-- Portfolio Section Heading-->
+                <div class="text-center">
+                    <h2 style="line-height: normal" class="page-section-heading text-secondary mb-0 d-inline-block">Here are Outputs based on each Ethics Principles</h2>
+                    <br>
+                    <br>
+                    <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">tip: Click Info to show Principles explanation</h2>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" href="#utilitarianism">Show Outputs</a></div>
+
+        </div>
+            <h1 style="text-align:center">&nbsp;</h1>
+        </section>
+
+
+        <section class="page-section bg-primary text-white mb-0" id="utilitarianism">
+            <div class="container">
+                <!-- About Section Heading-->
+                <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="For limited resources, allocate resources proportionally according to the utility/happiness of the users.">Utilitarianism</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#Utilitarianism" href="javascript:void(0)">Info</a></div>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#portfolioModal0" href="javascript:void(0)">Info</a> </div>#}
+{#                <br>#}
+                <div class="text-center">
+                        {% if utilitarianism is string %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">{{ utilitarianism }}</h2><br>
+                        {% else %}
+                            {% for num in range(1,num_user + 1) %}
+                                <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">User{{ num }}: <b>{{ utilitarianism[num-1] }}</b><br></h2><br>
+                                <h2></h2>
+                            {% endfor %}
+                        {% endif %}
+                        <br>
+                        <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" data-toggle="modal" data-target="#UtilitarianismEX" href="javascript:void(0)">Explanation</a></div>
+                </div>
+                <br>
+            <br>
+            <br>
+
+            <div class="container d-flex align-items-center text-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" href="#libertarian">Show Next Output</a></div>
+{#            <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button></div>#}
+
+            </div>
+        </section>
+
+
+
+        <section class="page-section portfolio" id="libertarian">
+            <div class="container">
+                <!-- About Section Heading-->
+                <div class="text-center">
+                    <h2 class="page-section-heading text-secondary mb-0 d-inline-block" title="For limited resources, allocate resources proportionally according to the contribution of the users.">Libertarian Proportionalism</h2>
+                    <br>
+                    <br>
+                    <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#Libertarian" href="javascript:void(0)">Info</a></div>
+                </div>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+{#                <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #88dccc; padding: 5px;  background-color: #88dccc;" data-toggle="modal" data-target="#portfolioModal0" href="javascript:void(0)">Info</a> </div>#}
+{#                <br>#}
+                <div class="text-center">
+                    {% if libertarian_proportionalism is string %}
+                            <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">{{ libertarian_proportionalism }}</h2><br>
+                    {% else %}
+                            {% for num in range(1,num_user + 1) %}
+                                <h2 style="font-size: xx-large" class="page-section-heading text-secondary mb-0 d-inline-block">User{{ num }}: <b>{{ libertarian_proportionalism[num-1] }}</b><br></h2><br>
+                                <h2></h2>
+                            {% endfor %}
+                    {% endif %}
+                        <br>
+                        <div class="container d-flex align-items-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #007bff; padding: 5px;  background-color: #007bff;" data-toggle="modal" data-target="#LibertarianEX" href="javascript:void(0)">Explanation</a></div>
+                </div>
+                <br>
+            <br>
+            <br>
+
+            <div class="container d-flex align-items-center text-center flex-column"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #6f42c1; padding: 5px;  background-color: #6f42c1;" href="{{ url_for('hello_world') }}">BACK to Homepage</a></div>
+{#            <button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" style="color: white; font-weight: bold; font-size: xx-large; text-decoration: none; border: 1px #ed969e; padding: 5px;  background-color: #ed969e;" type="submit" >SUBMIT</button></div>#}
+
+            </div>
+        </section>
+
+
+
+
+
+        <div class="portfolio-modal modal fade" id="Utilitarianism" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the Utility or Happiness of users as a measure of morality. When an action maximises the total Utility/Happiness, it is
+                                                        ethical and the best output. Utility encompasses the pursuit of Happiness and the ability to stop or lessen
+                                                        unhappy outcomes.<br>
+                                                        E.g.<br>
+                                                        For limited resources, allocate resources proportionally according to the Utility/Happiness of the users.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="portfolio-modal modal fade" id="UtilitarianismEX" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Utilitarianism for Allocating Resources</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">How to Calculate: For limited resources, allocate resources proportionally according to the utility/happiness of the users.</p>
+                                    <p class="mb-5" style="font-size: larger">Limitation: If total utility/happiness is 0.</p>
+                                        {% if utilitarianism is string %}
+                                            <label>This Principle can't give the answer, because:</label>
+                                            <label><b>The Happiness value for each user are all 0</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Happiness/Utility when getting {{ resource }}: <b>{{ happiness[num-1] }}</b></label><br>
+                                            {% endfor %}
+                                            <label>Total Happiness/Utility: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ happiness[num] }} = {{ total_happiness }}{% else %}{{ happiness[num] }} + {% endif %}{% endfor %}</b></label><br>
+                                            <label>If total Happiness/Utility is 0, then it means that each user has a proportional weight of 0 and no resources can be allocated.</label><br>
+                                            <br>
+                                        {% else %}
+                                            <h3>Here's the Computation:</h3>
+                                            <label>Quantity Resources: <b>{{ resource_num }}</b></label><br>
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label>User{{ num }}'s Happiness/Utility when getting {{ resource }}: <b>{{ happiness[num-1] }}</b></label><br>
+                                           {% endfor %}
+                                            <label>Total Happiness/Utility: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ happiness[num] }} = {{ total_happiness }}{% else %}{{ happiness[num] }} + {% endif %}{% endfor %}</b></label><br>
+                                            <br>
+                                            <label>So,</label><br>
+                                            <br>
+                                            <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;margin: auto; padding: 20px">
+                                                {% for num in range(1,num_user + 1) %}
+                                                    <label style="width: 100%;flex-basis: 50%;">User{{ num }} gets: <b>$$\frac{ {{happiness[num-1]}} }{ {{ total_happiness }} } &times; {{ resource_num }} = {{ utilitarianism[num-1] }}$$</b></label>
+                                               {% endfor %}
+                                            </div>
+                                        {% endif %}
+
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="portfolio-modal modal fade" id="Libertarian" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <p class="mb-5" style="font-size: larger">Consider the Contribution of users to an object as a measure of
+                                                                morality. It focuses on the stakeholders contributing most to the
+                                                                goal.<br>
+                                                                    E.g.<br>
+                                                                    UserA and UserB earn from a product they create. They should
+                                                                    each receive a share of the profits equivalent to their Contribution,
+                                                                    which might have been labour, funds, or other resources. UserA
+                                                                    should receive 60% of the earnings, and UserB should receive 40%
+                                                                    if UserA contributed 60% of the work and UserB contributed 40%
+                                                                    of the effort.</p>
+                                    <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="portfolio-modal modal fade" id="LibertarianEX" tabindex="-1" role="dialog" aria-labelledby="#portfolioModal0Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                     <h2 style="line-height: normal" class="portfolio-modal-title text-secondary">Libertarian Proportionalism for Allocating Resources</h2>
+{#                                    <p class="mb-5" style="font-size: larger">Tip: Options could be where to eat (KFC, McDonald's), where to travel (London, Paris), ways for recreation (skating, skiing), etc.</p>#}
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <p class="mb-5" style="font-size: larger">How to Calculate: For limited resources, allocate resources proportionally according to the Contribution of the users.</p>
+                                    <p class="mb-5" style="font-size: larger">Limitation: If total Contribution is 0.</p>
+                                   {% if libertarian_proportionalism is string %}
+                                        <label>This Principle can't give the answer, because:</label>
+                                        <label><b>The Contribution value for each user are all 0</b></label><br>
+                                        {% for num in range(1,num_user + 1) %}
+                                            <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1] }}</b></label><br>
+                                        {% endfor %}
+                                        <label>Total Contribution: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ contribution[num] }} = {{ total_contribution }}{% else %}{{ contribution[num] }} + {% endif %}{% endfor %}</b></label><br>
+                                        <label>If total Contribution is 0, then it means that each user has a proportional weight of 0 and no resources can be allocated.</label><br>
+                                        <br>
+                                    {% else %}
+                                        <h3>Here's the Computation:</h3>
+                                        <label>Quantity Resources: <b>{{ resource_num }}</b></label><br>
+                                        {% for num in range(1,num_user + 1) %}
+                                            <label>User{{ num }}'s Contribution: <b>{{ contribution[num-1] }}</b></label><br>
+                                       {% endfor %}
+                                        <label>Total Contribution: <b> {% for num in range(0,num_user) %} {% if num == num_user-1  %} {{ contribution[num] }} = {{ total_contribution }}{% else %}{{ contribution[num] }} + {% endif %}{% endfor %}</b></label><br>
+                                        <br>
+                                        <label>So,</label><br>
+                                        <br>
+                                       <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;margin: auto; padding: 20px">
+                                            {% for num in range(1,num_user + 1) %}
+                                                <label style="width: 100%;flex-basis: 50%;">User{{ num }} gets: <b>$$\frac{ {{contribution[num-1]}} }{ {{ total_contribution }} } &times; {{ resource_num }} = {{ libertarian_proportionalism[num-1] }}$$</b></label>
+                                           {% endfor %}
+                                       </div>
+                                    {% endif %}
+                            </div>
+                        </div>
+                            <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Close Window</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        </form>
+        <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
+        <div class="scroll-to-top d-lg-none position-fixed"><a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a></div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+        <script src="assets/mail/jqBootstrapValidation.js"></script>
+        <script src="assets/mail/contact_me.js"></script>
+        <!-- Core theme JS-->
+        <script src="../static/js/scripts.js"></script>
+    </body>
+</html>
